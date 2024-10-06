@@ -6,6 +6,12 @@
 - 一个可靠的IMU，打算用自己画的LSM6D0+MMC5603 USB陀螺仪模块
 - 一个支持OpenCL的GPU（打算使用opencl加速）
 
+## 系统兼容
+为了方便在我的各种设备上开发，会兼容以下的系统
+- WSL2 (Ubuntu 2024.04)
+- Macos（M1 macbookair）
+- Ubuntu 2024.04（RK3588开发板）
+
 ## 计划的算法流程
 1. 获取到可靠的ORB特征点点云
     - 提取orb特征点
