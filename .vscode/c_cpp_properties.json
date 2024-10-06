@@ -3,7 +3,11 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/**",
+                "/opt/homebrew/include/librealsense2",
+                "/opt/homebrew/Cellar/librealsense/2.56.1/include",
+                "/usr/local/include/opencv4"
             ],
             "defines": [
                 "_DEBUG",

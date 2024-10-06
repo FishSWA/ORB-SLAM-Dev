@@ -1,9 +1,10 @@
 #include "main.hpp"
+#include "D430.hpp"
 #include <iostream>
 
 
 int main(void)
 {
-    std::cout << "hello" << std::endl;
+    D430_main();
     return 0;
 }
