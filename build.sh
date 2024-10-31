@@ -1,5 +1,2 @@
-mkdir build
-cd build
-cmake ..
-make -j4
-./VSLAM_Dev
+mkdir build 
+cd build &&cmake .. && make -j && ./VSLAM_Dev
