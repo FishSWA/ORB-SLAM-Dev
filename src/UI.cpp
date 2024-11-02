@@ -35,6 +35,11 @@ ImGuiApp::ImGuiApp(int width, int height, const char* title) {
     Cam_frame[0].loadFromMat(image);
     cv::Mat image2 = cv::imread("../test/test1.jpg", cv::IMREAD_COLOR);
     Cam_frame[1].loadFromMat(image2);
+    //预载选择标签（test）
+    imu_device.addItem("/dev/ttyACM0");
+    imu_device.addItem("/dev/ttyACM1");
+    realsense_device.addItem("D430");
+    realsense_device.addItem("D435");
 }
 
 ImGuiApp::~ImGuiApp() {
@@ -88,40 +93,31 @@ void ImGuiApp::WindowsDefine() {
 
     // 第二列
     ImGui::NextColumn(); 
-    ImGui::SetColumnWidth(1, 624); // 设置第二列宽度，剩余的宽度
+    ImGui::SetColumnWidth(1, 624); 
+    ImGui::BeginChild("slan_3d_area", ImVec2(0, 400), false);
     cv::Mat img; // vslam地图，临时占位
     Texture img_texture(img);
     ImGui::Image((ImTextureID)(intptr_t)img_texture.getID(), ImVec2(600, 400));
+    ImGui::EndChild();
 
         // 创建子列
         ImGui::BeginChild("sub_area", ImVec2(0, 180), false);
         ImGui::Columns(2, "sub_split_layout", false); 
         ImGui::SetColumnWidth(0, 400); // 第一个子列宽度
         // 子列1内容
-        if(ImGui::BeginCombo("IMU device", uart_device[uart_device_id]))
-        {
-            for (int i = 0; i < uart_device.size(); i++) {
-                // 判断选项是否被选中
-                bool is_selected = (uart_device_id == i);
-                // 如果选项被点击，更新当前选中项索引
-                if (ImGui::Selectable(uart_device[i], is_selected))
-                    uart_device_id = i;
-
-                // 设置选项为默认选中状态，以便在下拉清单中高亮显示
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
-            }
-            ImGui::EndCombo();
-        }
+        imu_device.show("IMU Device");
+        realsense_device.show("RealSense Device");
+        if(ImGui::Button("Record")) printf("Reaord pressed, label%s\n", imu_device.getCurrentItem().c_str());
+        if(ImGui::Button("Start")) printf("Start Pressed, label%s\n", realsense_device.getCurrentItem().c_str());
         // 子列2内容：IMU数据
         ImGui::NextColumn(); 
         ImGui::SetColumnWidth(1, 200); 
-        ImGui::Text("Yaw: %f", 1.0);
+        ImGui::Text("Yaw:   %f", 1.0);
         ImGui::Text("Pitch: %f", 1.0);
-        ImGui::Text("Roll: %f", 1.0);
-        ImGui::Text("a_X: %f", 1.0);
-        ImGui::Text("a_Y: %f", 1.0);
-        ImGui::Text("a_Z: %f", 1.0);
+        ImGui::Text("Roll:  %f", 1.0);
+        ImGui::Text("a_X:   %f", 1.0);
+        ImGui::Text("a_Y:   %f", 1.0);
+        ImGui::Text("a_Z:   %f", 1.0);
         ImGui::Columns(1, "sub_split_layout");
         ImGui::EndChild();
 

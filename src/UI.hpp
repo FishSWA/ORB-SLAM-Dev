@@ -64,13 +64,54 @@ private:
 };
 
 
+/*用来维护下拉清单的类*/
+class ImGuiCombo {
+private:
+    std::vector<std::string> items; // 存储选项列表
+    int current_item = -1; // 当前选中的选项索引，-1 表示没有选中
+
+public:
+    // 添加一个选项到下拉菜单
+    void addItem(const std::string& item) {
+        items.push_back(item);
+    }
+
+    // 清空选项列表
+    void clearItems() {
+        items.clear();
+        current_item = -1;
+    }
+
+    // 获取当前选中的选项，返回选中的字符串
+    std::string getCurrentItem() const {
+        if (current_item >= 0 && current_item < items.size()) {
+            return items[current_item];
+        }
+        return ""; // 如果没有选中任何项，返回空字符串
+    }
+
+    // 显示下拉清单并处理交互
+    void show(const char* label) {
+        if (ImGui::BeginCombo(label, current_item >= 0 ? items[current_item].c_str() : "Select...")) {
+            for (int i = 0; i < items.size(); i++) {
+                bool is_selected = (current_item == i);
+                if (ImGui::Selectable(items[i].c_str(), is_selected)) {
+                    current_item = i;
+                }
+
+                if (is_selected) {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
+    }
+};
+
 class ImGuiApp {
 public:
     Texture Cam_frame[2];   //双目相机捕获到的帧，0-左，1-右
-    std::array<const char*, 5> uart_device{{"/dev/ttyACM0", "/dev/ttyACM1"}};
-    int uart_device_id = 0;
-    std::array<const char*, 5> real_sense_device{{"D430", "D435"}};
-    int real_sense_device_id = 0;
+    ImGuiCombo imu_device, realsense_device;
     ImGuiApp(int width, int height, const char* title);
     ~ImGuiApp();
     int run();
