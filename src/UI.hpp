@@ -6,6 +6,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
+#include "ImGuiFileDialog.h"
 
 #include <opencv2/opencv.hpp>
 
@@ -118,6 +119,7 @@ public:
 
 private:
     void WindowsDefine();  // 用于定义窗口内容的函数
+    void openfile(const char *name);
     GLFWwindow* window;
 
     //test

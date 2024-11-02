@@ -81,6 +81,28 @@ int ImGuiApp::run() {
     return 0;
 }
 
+//打开文件按钮
+void ImGuiApp::openfile(const char *name)
+{
+    if (ImGui::Button(name)){
+        ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp");
+        ImGui::SetNextWindowSize(ImVec2(700, 500), ImGuiCond_FirstUseEver);
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+            std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+            // Output the selected file path to the console
+            std::cout << "Selected file: " << filePathName << std::endl;
+            std::cout << "Directory: " << filePath << std::endl;
+        }
+        ImGuiFileDialog::Instance()->Close();
+    }
+}
+
 
 void ImGuiApp::WindowsDefine() {
     // 创建两列布局
@@ -109,6 +131,7 @@ void ImGuiApp::WindowsDefine() {
         realsense_device.show("RealSense Device");
         if(ImGui::Button("Record")) printf("Reaord pressed, label%s\n", imu_device.getCurrentItem().c_str());
         if(ImGui::Button("Start")) printf("Start Pressed, label%s\n", realsense_device.getCurrentItem().c_str());
+        openfile("open file");
         // 子列2内容：IMU数据
         ImGui::NextColumn(); 
         ImGui::SetColumnWidth(1, 200); 
